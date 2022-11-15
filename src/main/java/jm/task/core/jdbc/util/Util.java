@@ -1,6 +1,5 @@
 package jm.task.core.jdbc.util;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -23,11 +22,10 @@ public class Util {
     public static Connection getConnection() {
         Connection connection = null;
         try {
-            //Class.forName(DB_DRIVER);
             connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
             connection.setAutoCommit(false);
             System.out.println("Connection OK");
-        } catch (SQLException /*| ClassNotFoundException*/ e) {
+        } catch (SQLException e) {
             System.out.println("Connection FAIL");
         }
 
@@ -66,47 +64,8 @@ public class Util {
         return sessionFactory;
     }
 
-    public static void CloseQuietly(Connection conn) {
-        if (conn != null) {
-            try {
-                conn.close();
-            } catch (Exception e) {
-                //
-            }
-        }
-    }
 
-    public static void CloseQuietly(Statement stmt) {
-        if (stmt != null) {
-            try {
-                stmt.close();
-            } catch (Exception e) {
-                //
-            }
-        }
-    }
-
-    public static void CloseQuietly(ResultSet rs) {
-        if (rs != null) {
-            try {
-                rs.close();
-            } catch (Exception e) {
-                //
-            }
-        }
-    }
-
-    public static void CloseQuietly(Session session) {
-        if (session != null) {
-            try {
-                session.close();
-            } catch (Exception e) {
-                //
-            }
-        }
-    }
-
-    public static void RollbackQuietly(Connection conn) {
+    public static void rollbackQuietly(Connection conn) {
         if (conn != null) {
             try {
                 conn.rollback();
@@ -117,7 +76,7 @@ public class Util {
         }
     }
 
-    public static void RollbackQuietly(Transaction transaction) {
+    public static void rollbackQuietly(Transaction transaction) {
         if (transaction != null) {
             try {
                 transaction.rollback();
