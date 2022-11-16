@@ -2,12 +2,10 @@ package jm.task.core.jdbc.util;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
 
 import jm.task.core.jdbc.model.User;
-import org.hibernate.service.ServiceRegistry;
 
 import java.sql.*;
 import java.util.Properties;
@@ -48,15 +46,9 @@ public class Util {
         settings.put(Environment.HBM2DDL_AUTO, "");
 
         try {
-
             configuration.setProperties(settings);
-
             configuration.addAnnotatedClass(User.class);
-
-            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-                    .applySettings(configuration.getProperties()).build();
-
-            sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+            sessionFactory = configuration.buildSessionFactory();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
