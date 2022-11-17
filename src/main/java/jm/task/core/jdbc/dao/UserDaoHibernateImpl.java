@@ -19,91 +19,90 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
-        Transaction tx1 = null;
+        Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
-            tx1 = session.beginTransaction();
+            transaction = session.beginTransaction();
             NativeQuery query = session.createSQLQuery("CREATE TABLE Users (id BIGINT NOT NULL AUTO_INCREMENT, Name varchar(255), LastName varchar(255), Age TINYINT, PRIMARY KEY (id))");
             query.executeUpdate();
-            tx1.commit();
+            transaction.commit();
         } catch (Exception sqlException) {
-            Util.rollbackQuietly(tx1);
+            Util.rollbackQuietly(transaction);
         }
     }
 
     @Override
     public void dropUsersTable() {
-        Transaction tx1 = null;
+        Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
-            tx1 = session.beginTransaction();
+            transaction = session.beginTransaction();
             NativeQuery query = session.createSQLQuery("DROP TABLE Users");
             query.executeUpdate();
-            tx1.commit();
+            transaction.commit();
         } catch (Exception sqlException) {
-            Util.rollbackQuietly(tx1);
+            Util.rollbackQuietly(transaction);
         }
     }
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        Transaction tx1 = null;
+        Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
-            tx1 = session.beginTransaction();
+            transaction = session.beginTransaction();
             session.save(new User(name, lastName, age));
-            tx1.commit();
+            transaction.commit();
         } catch (Exception sqlException) {
-            Util.rollbackQuietly(tx1);
+            Util.rollbackQuietly(transaction);
         }
     }
 
     @Override
     public void removeUserById(long id) {
-        Transaction tx1 = null;
+        Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
-            tx1 = session.beginTransaction();
+            transaction = session.beginTransaction();
             session.delete(getUserById(id));
-            tx1.commit();
+            transaction.commit();
             System.out.println("\n>>> Student with id = " + id + " is successfully deleted!\n");
         } catch (Exception sqlException) {
-            Util.rollbackQuietly(tx1);
+            Util.rollbackQuietly(transaction);
         }
     }
 
     @Override
     public List<User> getAllUsers() {
         List<User> result = null;
-        Transaction tx1 = null;
+        Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
-            tx1 = session.beginTransaction();
+            transaction = session.beginTransaction();
             result = session.createQuery("SELECT a FROM User a", User.class).list();
-            tx1.commit();
+            transaction.commit();
         } catch (Exception sqlException) {
-            Util.rollbackQuietly(tx1);
+            Util.rollbackQuietly(transaction);
         }
         return result;
     }
 
     @Override
     public void cleanUsersTable() {
-        Transaction tx1 = null;
+        Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
-            tx1 = session.beginTransaction();
-            NativeQuery query = session.createSQLQuery("TRUNCATE TABLE Users");
-            query.executeUpdate();
-            tx1.commit();
+            transaction = session.beginTransaction();
+            session.createQuery("DELETE FROM User").executeUpdate();
+            transaction.commit();
         } catch (Exception sqlException) {
-            Util.rollbackQuietly(tx1);
+            Util.rollbackQuietly(transaction);
         }
     }
 
     public User getUserById(long id) {
         User user = null;
-        Transaction tx1 = null;
+        Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
-            tx1 = session.beginTransaction();
+            transaction = session.beginTransaction();
             user = session.get(User.class, id);
-            tx1.commit();
+            transaction.commit();
         } catch (Exception sqlException) {
-            Util.rollbackQuietly(tx1);
+            Util.rollbackQuietly(transaction);
         }
         return user;
     }
