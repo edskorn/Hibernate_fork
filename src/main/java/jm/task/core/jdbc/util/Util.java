@@ -1,5 +1,6 @@
 package jm.task.core.jdbc.util;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
@@ -75,6 +76,16 @@ public class Util {
                 System.out.println("Transaction is rolled back");
             } catch (Exception e) {
                 System.out.println("Transaction doesn't rolled back");
+            }
+        }
+    }
+
+    public static void closeQuietly (Session session) {
+        if (session != null) {
+            try {
+                session.close();
+            } catch (Exception e) {
+                //
             }
         }
     }
